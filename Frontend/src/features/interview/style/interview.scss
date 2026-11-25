@@ -1,0 +1,513 @@
+@use "../../../style/theme" as *;
+
+$sticky-top: calc(#{$navbar-height} + 1.5rem);
+
+// ── Page Shell ────────────────────────────────────────────────────────────────
+.interview-page {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    @media (max-width: $breakpoint-sm) {
+        padding: 1.25rem 1rem 3rem;
+    }
+}
+
+.report-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+
+        h1 {
+            font-size: clamp(1.35rem, 3vw, 1.75rem);
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 0.85rem;
+            color: $text-muted;
+        }
+    }
+
+    &__back {
+        width: fit-content;
+        font-size: 0.8rem;
+        color: $text-muted;
+        text-decoration: none;
+
+        &:hover {
+            color: $accent;
+        }
+    }
+
+    @media (max-width: $breakpoint-sm) {
+        .button {
+            width: 100%;
+        }
+    }
+}
+
+// ── Layout ────────────────────────────────────────────────────────────────────
+.interview-layout {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr) 260px;
+    grid-template-areas: "nav content sidebar";
+    gap: 1.5rem;
+    align-items: start;
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+            "sidebar"
+            "nav"
+            "content";
+        gap: 1rem;
+    }
+}
+
+%panel {
+    background-color: $bg-card;
+    border: 1px solid $border-color;
+    border-radius: 1rem;
+}
+
+// ── Nav ──────────────────────────────────────────────────────────────────────
+.interview-nav {
+    @extend %panel;
+    grid-area: nav;
+    position: sticky;
+    top: $sticky-top;
+    padding: 1rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    &__label {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: $text-muted;
+        padding: 0 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+
+    &__item {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        width: 100%;
+        padding: 0.65rem 0.75rem;
+        background: none;
+        border: none;
+        border-radius: 0.5rem;
+        color: $text-muted;
+        font-size: 0.875rem;
+        cursor: pointer;
+        text-align: left;
+        transition: background-color 0.15s, color 0.15s;
+
+        &:hover {
+            background-color: $bg-panel;
+            color: $text-primary;
+        }
+
+        &--active,
+        &--active:hover {
+            background-color: rgba($accent, 0.1);
+            color: $accent;
+        }
+    }
+
+    &__icon {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        position: static;
+        flex-direction: row;
+        padding: 0.4rem;
+
+        &__label {
+            display: none;
+        }
+
+        &__item {
+            justify-content: center;
+            padding: 0.6rem 0.5rem;
+        }
+    }
+
+    @media (max-width: $breakpoint-sm) {
+        &__icon {
+            display: none;
+        }
+    }
+}
+
+// ── Content ───────────────────────────────────────────────────────────────────
+.interview-content {
+    @extend %panel;
+    grid-area: content;
+    padding: 1.75rem 2rem;
+    min-height: 60vh;
+
+    @media (max-width: $breakpoint-sm) {
+        padding: 1.25rem 1rem;
+    }
+}
+
+.content-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid $border-color;
+
+    h2 {
+        font-size: 1.1rem;
+        font-weight: 700;
+    }
+
+    &__count {
+        font-size: 0.75rem;
+        color: $text-muted;
+        background-color: $bg-panel;
+        padding: 0.15rem 0.6rem;
+        border-radius: 2rem;
+        border: 1px solid $border-color;
+    }
+}
+
+// ── Question Cards ────────────────────────────────────────────────────────────
+.q-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.q-card {
+    background-color: $bg-panel;
+    border: 1px solid $border-color;
+    border-radius: 0.6rem;
+    overflow: hidden;
+    transition: border-color 0.2s;
+
+    &:hover {
+        border-color: $border-hover;
+    }
+
+    &--open {
+        border-color: rgba($accent, 0.35);
+    }
+
+    &__header {
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.9rem 1rem;
+        background: none;
+        border: none;
+        text-align: left;
+        cursor: pointer;
+    }
+
+    &__index {
+        flex-shrink: 0;
+        font-size: 0.7rem;
+        font-weight: 700;
+        border-radius: 0.3rem;
+        padding: 0.15rem 0.4rem;
+        margin-top: 2px;
+        @include tag($accent);
+    }
+
+    &__question {
+        flex: 1;
+        font-size: 0.9rem;
+        font-weight: 500;
+        line-height: 1.5;
+    }
+
+    &__chevron {
+        flex-shrink: 0;
+        color: $text-muted;
+        transition: transform 0.2s, color 0.2s;
+        margin-top: 2px;
+    }
+
+    &--open &__chevron {
+        transform: rotate(180deg);
+        color: $accent;
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+        padding: 0.9rem 1rem 1rem;
+        border-top: 1px solid $border-color;
+    }
+
+    &__section {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+
+        p {
+            font-size: 0.85rem;
+            color: $text-secondary;
+            line-height: 1.65;
+        }
+    }
+
+    &__tag {
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: 0.15rem 0.5rem;
+        border-radius: 0.25rem;
+        width: fit-content;
+
+        &--intention { @include tag($purple); }
+        &--answer { @include tag($success); }
+    }
+}
+
+// ── Road Map ──────────────────────────────────────────────────────────────────
+.roadmap-list {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: 28px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(to bottom, $accent, rgba($accent, 0.1));
+        border-radius: 1px;
+    }
+}
+
+.roadmap-day {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.75rem 0 0.75rem 3.5rem;
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: 21px;
+        top: 1.05rem;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background-color: $bg-card;
+        border: 2px solid $accent;
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+    }
+
+    &__badge {
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 0.1rem 0.5rem;
+        border-radius: 2rem;
+        @include tag($accent);
+    }
+
+    &__focus {
+        font-size: 0.95rem;
+        font-weight: 600;
+    }
+
+    &__tasks {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+
+        li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: $text-secondary;
+            line-height: 1.5;
+        }
+    }
+
+    &__bullet {
+        flex-shrink: 0;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background-color: $text-muted;
+        margin-top: 8px;
+    }
+}
+
+// ── Sidebar ───────────────────────────────────────────────────────────────────
+.interview-sidebar {
+    @extend %panel;
+    grid-area: sidebar;
+    position: sticky;
+    top: $sticky-top;
+    padding: 1.5rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    @media (max-width: $breakpoint-md) {
+        position: static;
+        flex-direction: row;
+        align-items: flex-start;
+
+        .skill-gaps {
+            flex: 1;
+            padding-left: 1.5rem;
+            border-left: 1px solid $border-color;
+        }
+    }
+
+    @media (max-width: $breakpoint-sm) {
+        flex-direction: column;
+
+        .skill-gaps {
+            padding-left: 0;
+            border-left: none;
+        }
+    }
+}
+
+.sidebar-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $text-muted;
+}
+
+.score--high { --score-color: #{$success}; }
+.score--mid { --score-color: #{$warning}; }
+.score--low { --score-color: #{$danger}; }
+
+@property --score {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 0;
+}
+
+@keyframes ring-fill {
+    from {
+        --score: 0;
+    }
+}
+
+.match-score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid $border-color;
+
+    .sidebar-label {
+        align-self: flex-start;
+    }
+
+    &__ring {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background:
+            radial-gradient(closest-side, $bg-card 82%, transparent 83%),
+            conic-gradient(var(--score-color) calc(var(--score) * 1%), $bg-panel 0);
+        animation: ring-fill 1.4s cubic-bezier(0.33, 1, 0.68, 1);
+
+        @media (prefers-reduced-motion: reduce) {
+            animation: none;
+        }
+    }
+
+    &__value {
+        font-size: 1.75rem;
+        font-weight: 800;
+
+        small {
+            font-size: 0.8rem;
+            color: $text-muted;
+            margin-left: 1px;
+        }
+    }
+
+    &__sub {
+        font-size: 0.8rem;
+        font-weight: 500;
+        text-align: center;
+        color: var(--score-color);
+    }
+
+    @media (max-width: $breakpoint-md) {
+        padding-bottom: 0;
+        border-bottom: none;
+        min-width: 160px;
+    }
+}
+
+.skill-gaps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    &__list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    &__empty {
+        font-size: 0.85rem;
+        color: $text-muted;
+    }
+}
+
+.skill-tag {
+    font-size: 0.775rem;
+    font-weight: 500;
+    padding: 0.3rem 0.7rem;
+    border-radius: 0.4rem;
+    cursor: default;
+
+    &--high { @include tag($danger); }
+    &--medium { @include tag($warning); }
+    &--low { @include tag($success); }
+}

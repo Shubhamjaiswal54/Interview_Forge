@@ -1,0 +1,45 @@
+@use "./theme" as *;
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: 1px solid transparent;
+    padding: 0.7rem 1.25rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s, opacity 0.2s, transform 0.1s;
+
+    &.primary-button {
+        background: linear-gradient(135deg, $accent 0%, $accent-dark 100%);
+        color: white;
+
+        &:hover:not(:disabled) {
+            opacity: 0.9;
+        }
+    }
+
+    &.ghost-button {
+        background: transparent;
+        border-color: $border-color;
+        color: $text-secondary;
+
+        &:hover:not(:disabled) {
+            border-color: $border-hover;
+            color: $text-primary;
+        }
+    }
+
+    &:active:not(:disabled) {
+        transform: scale(0.98);
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
